@@ -8,6 +8,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -27,7 +28,8 @@ public class Abbonamento extends TitoloDiVIaggio {
     private Boolean validità;
     private @Getter LocalDate scadenzaAbbonamento;
     @ManyToOne
-    private Tessera id_tessera;
+    @JoinColumn(name = "tessera_id")
+    private Tessera tessera;
     
     // Costruttori
 
@@ -92,4 +94,19 @@ public class Abbonamento extends TitoloDiVIaggio {
 
     }
 
+    
+    
+	public LocalDate getScadenzaAbbonamento() {
+		return scadenzaAbbonamento;
+	}
+
+	public Tessera getTessera() {
+		return tessera;
+	}
+
+	public void setTessera(Tessera tessera) {
+		this.tessera = tessera;
+	}
+
+    
 }

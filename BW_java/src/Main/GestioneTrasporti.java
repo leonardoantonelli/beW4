@@ -124,6 +124,7 @@ public class GestioneTrasporti {
 						a.setDataemissione();
 						a.setScadenzaAbbonamento();
 						a.setPuntoemissione(opzionesalvata);
+						a.setTessera(t);
 						TitoloDiViaggioDAO.saveTitoloViaggio(a);
 						System.out.println("Abbonamento aggiunto con successo!");
 						esci = true;
@@ -173,7 +174,7 @@ public class GestioneTrasporti {
 			    + "\n 1 VISUALIZZA TUTTI I TITOLI DI VIAGGIO"
 			    + "\n 2 VISUALIZZA TITOLI DI VIAGGIO IN UN PERIODO DI TEMPO"
 			    + "\n 3 VISUALIZZA TITOLI DI VIAGGIO PER PUNTO DI EMISSIONE"
-			    + "\n 4 VERIFICA VALIDITA ABBONAMNETO");
+			    + "\n 4 VERIFICA VALIDITA' ABBONAMENTO");
 		    Integer ss = s.nextInt();
 		    s.nextLine();
 		    switch (ss) {
@@ -232,8 +233,34 @@ public class GestioneTrasporti {
 			break;
 		    case 4:
 		    	System.out.println("Inserisci numero della tessera per verifica degli abbonamenti ");
-		    	Query q4 = em
-		        .createQuery("SELECT id FROM TitoloDiVIaggio t WHERE t. = :dis");
+		    	String numtessera = s.nextLine();
+		    	Boolean quit = false;
+		    	while(!quit) {
+		    		
+		    		try {
+		    			long nT = Integer.parseInt(numtessera);
+		    			Tessera T = TesseraDAO.findTessera(nT);
+		    			if(TesseraDAO.isTessereEmpty() != 0 && T != null) {
+		    				Query q5 = em.createQuery("SELECT a FROM Abbonamento a WHERE tessera_id = :t");
+		    				q5.setParameter("t", nT);
+		    				List<Abbonamento> res = q5.getResultList();
+		    				System.out.println("Tessera n: " + T.getId() + ""
+		    						+ " \n Nome : " + T.getNome() + ""
+		    						+ " \n COgnome : " + T.getCognome() + " "
+		    						+ " \n Numero abbonamenti " + res.size() + " \n");
+		    				res.forEach(a -> System.out.println(" Abbonamento n : " + a.getId() + "\n Scadenza : " + a.getScadenzaAbbonamento() + " \n"));
+		    				quit = true;
+		    			} else {
+		    				System.out.println("Numero tessera non trovato");
+		    				numtessera = s.nextLine();
+		    			}
+		    		} catch (Exception e) {
+		    			System.out.println("Error " + e);
+		    			break;
+		    		}
+		    		
+		    	}
+		    	
 		    	break;
 		    default:
 			System.out.println("Scelta non valida");
@@ -241,6 +268,24 @@ public class GestioneTrasporti {
 		}
 		break;
 	    case 4:
+	    	Boolean quiT = false;
+	    	while(!quiT) {
+	    		try {
+	    			if(TesseraDAO.isTessereEmpty() != 0) {
+	    				Query q6 = em.createQuery("SELECT t FROM Tessera t");
+	    				List<Tessera> arr = q6.getResultList();
+	    				System.out.println("Sono state trovatre : " + arr.size() + (arr.size() == 1 ? " Tessera \n" : " Tessere \n"));
+	    				arr.forEach(tesseract -> System.out.println(tesseract.toString()));
+	    				quiT = true;
+	    			} else {
+	    				System.out.println("Numero tessera non trovato");
+	    				
+	    			}
+	    		} catch (Exception e) {
+	    			System.out.println("Error " + e);
+	    			break;
+	    		}
+	    	}
 		break;
 	    case 5:
 		Boolean back = false;
