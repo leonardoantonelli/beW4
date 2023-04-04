@@ -6,14 +6,18 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import Main.GestioneTrasporti;
+import TitoloDiVIaggio.Abbonamento;
+
 
 @Entity
 @Table(name = "tessere")
@@ -28,6 +32,8 @@ public class Tessera {
 	private Date dataemissione;
 	private LocalDate datascadenza;
 	private Boolean verificata;
+	@OneToMany(mappedBy="id_tessera")
+	private List<Abbonamento> listaabb;
 
 	
 	

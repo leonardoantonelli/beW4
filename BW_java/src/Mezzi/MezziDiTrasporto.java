@@ -16,11 +16,11 @@ public class MezziDiTrasporto {
 	@Enumerated(EnumType.STRING)
 	private Stato_mezzo stato;
 	
-	private Date datainziotratta;
-	private Date datafinetratta;
-	
-	private Date datainziomanutenzione;
-	private Date datafinemanutenzione;
-	
+//	private Date datainziotratta;
+//	private Date datafinetratta;
+//	
+//	private Date datainziomanutenzione;
+//	private Date datafinemanutenzione;
+//	
 	
 }

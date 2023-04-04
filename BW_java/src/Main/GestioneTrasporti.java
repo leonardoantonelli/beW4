@@ -30,14 +30,7 @@ public class GestioneTrasporti {
 	Distributore d3 = new Distributore();
 
 	while (true) {
-	    System.out.println("Seleziona una delle seguenti opzioni:" + "\n 1 ACQUISTA TITOLO DI VIAGGIO " // Crea
-													    // biglietti
-													    // e
-													    // abbonamenti
-													    // solo se
-													    // provvisti
-													    // di numero
-													    // tessera
+	    System.out.println("Seleziona una delle seguenti opzioni:" + "\n 1 ACQUISTA TITOLO DI VIAGGIO " // Crea biglietti e abbonamenti solo se provvisti di numero tessera
 		    + "\n 2 SOTTOSCRIVI TESSERA " // Crea una tessera
 		    + "\n 3 GESTIONE BIGLIETTI/ABBONAMENTI " // Visualizza tutti i biglietti/abbonamenti emessi in un
 							     // range di date
@@ -179,7 +172,8 @@ public class GestioneTrasporti {
 		    System.out.println("Seleziona una delle seguenti opzioni | 0 per uscire "
 			    + "\n 1 VISUALIZZA TUTTI I TITOLI DI VIAGGIO"
 			    + "\n 2 VISUALIZZA TITOLI DI VIAGGIO IN UN PERIODO DI TEMPO"
-			    + "\n 3 VISUALIZZA TITOLI DI VIAGGIO PER PUNTO DI EMISSIONE");
+			    + "\n 3 VISUALIZZA TITOLI DI VIAGGIO PER PUNTO DI EMISSIONE"
+			    + "\n 4 VERIFICA VALIDITA ABBONAMNETO");
 		    Integer ss = s.nextInt();
 		    s.nextLine();
 		    switch (ss) {
@@ -236,6 +230,11 @@ public class GestioneTrasporti {
 			    p = s.nextLine();
 			}
 			break;
+		    case 4:
+		    	System.out.println("Inserisci numero della tessera per verifica degli abbonamenti ");
+		    	Query q4 = em
+		        .createQuery("SELECT id FROM TitoloDiVIaggio t WHERE t. = :dis");
+		    	break;
 		    default:
 			System.out.println("Scelta non valida");
 		    }

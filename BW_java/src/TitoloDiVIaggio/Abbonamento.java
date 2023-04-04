@@ -8,10 +8,13 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import Enum.Periodicità;
 import Main.GestioneTrasporti;
+import Tessera.Tessera;
 import lombok.Getter;
 
 @Entity
@@ -23,7 +26,9 @@ public class Abbonamento extends TitoloDiVIaggio {
     private Periodicità periodicità;
     private Boolean validità;
     private @Getter LocalDate scadenzaAbbonamento;
-
+    @ManyToOne
+    private Tessera id_tessera;
+    
     // Costruttori
 
     public Abbonamento() {
