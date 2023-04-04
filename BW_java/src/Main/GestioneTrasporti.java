@@ -32,15 +32,9 @@ public class GestioneTrasporti {
 		Distributore d3 = new Distributore();
 
 		while (true) {
-			System.out.println("Seleziona una delle seguenti opzioni:" + "\n 1 ACQUISTA TITOLO DI VIAGGIO " // Crea
-																											// biglietti
-																											// e
-																											// abbonamenti
-																											// solo se
-																											// provvisti
-																											// di numero
-																											// tessera
-					+ "\n 2 SOTTOSCRIVI TESSERA " // Crea una tessera
+					System.out.println("Seleziona una delle seguenti opzioni:" + "\n 1 ACQUISTA TITOLO DI VIAGGIO "
+		// Crea biglietti e abbonamenti solo se provvisti di numero tessera
+					+ "\n 2 SOTTOSCRIVI TESSERA " // 
 					+ "\n 3 GESTIONE BIGLIETTI/ABBONAMENTI " // Visualizza tutti i biglietti/abbonamenti emessi in un
 																// range di date
 					+ "\n 4 GESTIONE TESSERE " // Gestione stato distributori
