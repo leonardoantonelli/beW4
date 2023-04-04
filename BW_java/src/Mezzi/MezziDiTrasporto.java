@@ -18,7 +18,7 @@ public class MezziDiTrasporto {
 	
 	private Date datainziotratta;
 	private Date datafinetratta;
-	
+	private Long maxposti;
 	private Date datainziomanutenzione;
 	private Date datafinemanutenzione;
 	

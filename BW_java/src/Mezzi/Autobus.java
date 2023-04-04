@@ -8,6 +8,6 @@ import javax.persistence.*;
 @DiscriminatorValue("Autobus")
 public class Autobus extends MezziDiTrasporto{
 	
-	private Long maxposti;
+	
 	
 }
