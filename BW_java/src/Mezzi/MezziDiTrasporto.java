@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 import Enum.Stato_mezzo;
 @Entity
-@Table(name= "titoli_di_viaggio")
+@Table(name= "mezzi_di_trasporto")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TipoMezzo", discriminatorType = DiscriminatorType.STRING)
 public class MezziDiTrasporto {
