@@ -15,12 +15,10 @@ import Tratte.Tratta;
 public class MezzoDiTrasporto {
 	
 	@Id	
-	private Long mezzo_id;
+	private String mezzo_id;
 
-	private Boolean stao;
-	private Date datainziotratta;
-	private Date datafinetratta;
-	
+	private Boolean stato_manutenzione;
+	private Integer numeroPosti;
 	private Date datainziomanutenzione;
 	private Date datafinemanutenzione;
 	@OneToMany(mappedBy = "mezzo")
@@ -28,13 +26,13 @@ public class MezzoDiTrasporto {
 	
 	//Costruttori
 	
-	public MezzoDiTrasporto(Long mezzo_id, Boolean stao, Date datainziotratta, Date datafinetratta,
+	public MezzoDiTrasporto(String mezzo_id, Boolean stato_manutenzione, Date datainziotratta, Date datafinetratta,
 			Date datainziomanutenzione, Date datafinemanutenzione, Set<Tratta> tratte) {
 		super();
 		this.mezzo_id = mezzo_id;
-		this.stao = stao;
-		this.datainziotratta = datainziotratta;
-		this.datafinetratta = datafinetratta;
+		this.stato_manutenzione = stato_manutenzione;
+		//this.datainziotratta = datainziotratta;
+		//this.datafinetratta = datafinetratta;
 		this.datainziomanutenzione = datainziomanutenzione;
 		this.datafinemanutenzione = datafinemanutenzione;
 		this.tratte = tratte;
@@ -44,37 +42,43 @@ public class MezzoDiTrasporto {
 		super();
 	}
 
-	public Long getMezzo_id() {
+	//Getter and Setter
+	
+	public String getMezzo_id() {
 		return mezzo_id;
 	}
 
-	public void setMezzo_id(Long mezzo_id) {
-		this.mezzo_id = mezzo_id;
+	public void setMezzo_id() {
+		String targa;
+		String letters = generateLetters(3);
+		String digits = generateNumbers(8);
+		targa = letters + digits;
+		this.mezzo_id = targa;
 	}
 
-	public Boolean getStao() {
-		return stao;
+	public Boolean getStatoManutenzione() {
+		return stato_manutenzione;
 	}
 
-	public void setStao(Boolean stao) {
-		this.stao = stao;
+	public void setStatoManutenzione(Boolean stato_manutenzione) {
+		this.stato_manutenzione = stato_manutenzione;
 	}
 
-	public Date getDatainziotratta() {
-		return datainziotratta;
-	}
+	//public Date getDatainziotratta() {
+	//	return datainziotratta;
+	//}
 
-	public void setDatainziotratta(Date datainziotratta) {
-		this.datainziotratta = datainziotratta;
-	}
+	//public void setDatainziotratta(Date datainziotratta) {
+	//	this.datainziotratta = datainziotratta;
+	//}
 
-	public Date getDatafinetratta() {
-		return datafinetratta;
-	}
+	//public Date getDatafinetratta() {
+	//	return datafinetratta;
+	//}
 
-	public void setDatafinetratta(Date datafinetratta) {
-		this.datafinetratta = datafinetratta;
-	}
+	//public void setDatafinetratta(Date datafinetratta) {
+	//	this.datafinetratta = datafinetratta;
+	//}
 
 	public Date getDatainziomanutenzione() {
 		return datainziomanutenzione;
@@ -99,8 +103,38 @@ public class MezzoDiTrasporto {
 	public void setTratte(Set<Tratta> tratte) {
 		this.tratte = tratte;
 	}
+
+	public Integer getNumeroPosti() {
+		return numeroPosti;
+	}
+
+	public void setNumeroPosti(MezzoDiTrasporto m) {
+		if(m instanceof Autobus) {
+			this.numeroPosti = 30;
+		} else {
+			this.numeroPosti = 60;
+		}
+	}
 	
-	//Getter and Setter
+	public static String generateLetters(int f) {
+		String letters = "";
+		int n = 'Z' - 'A' + 1;
+		for(int i = 0; i < f; i++) {
+			char c = (char) ('A' + Math.random() * n);
+			letters += c;
+		}
+		return letters;
+	}
+	
+	public static String generateNumbers(int f) {
+		String digits = "";
+		int n = '9' - '0' + 1;
+		for(int i = 0; i < f; i++) {
+			char c = (char) ('0' + Math.random() * n);
+		digits += c;
+		}
+		return digits;
+	}
 	
 	
 }

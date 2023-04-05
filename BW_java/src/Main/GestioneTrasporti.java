@@ -10,6 +10,9 @@ import javax.persistence.Query;
 import Distributori.Distributore;
 import Enum.Ticket_Office;
 import JpaUtil.JpaUtil;
+import Mezzi.Autobus;
+import Mezzi.MezzoDiTrasportoDAO;
+import Mezzi.Tram;
 import Tessera.Tessera;
 import Tessera.TesseraDAO;
 import TitoloDiVIaggio.Abbonamento;
@@ -316,7 +319,7 @@ public class GestioneTrasporti {
 	    	Boolean goback = false;
 	    	while(!goback) {
 	    		System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
-	    				+ "\n 1 AGGIUNGI MESSO"
+	    				+ "\n 1 AGGIUNGI MEZZO"
 	    				+ "\n 2 GESTIONE MANUTENZIONE MEZZO"
 	    				+ "\n 3 GESTIONE TRATTE");
 	    		Integer num = s.nextInt();
@@ -326,6 +329,39 @@ public class GestioneTrasporti {
 	    			goback = true;
 	    			break;
 	    		case 1:
+	    			
+	    			System.out.println("Seleziona il tipo di mezzo che vuoi aggiungere: 1 Autobus - 2 Tram | 0 per uscire");
+	    			Integer num2 = s.nextInt();
+    	    		s.nextLine();
+    	    		while(!goback) {
+    	    			switch(num2) {
+    	    			case 0:
+    	    				goback = true;
+    	    				break;
+    	    			case 1:
+    	    				try {
+    	    					Autobus a = new Autobus();
+    	    					a.setMezzo_id();
+    	    					a.setNumeroPosti(a);
+    	    					a.setStatoManutenzione(false);
+    	    					MezzoDiTrasportoDAO.saveMezzo(a);
+    	    					goback = true;
+    	    				} catch (Exception e) {System.out.println("Error" + e);}
+    	    				break;
+    	    			case 2:
+    	    				try {
+    	    					Tram tm = new Tram();
+    	    					tm.setMezzo_id();
+    	    					tm.setNumeroPosti(tm);
+    	    					tm.setStatoManutenzione(false);
+    	    					MezzoDiTrasportoDAO.saveMezzo(tm);
+    	    					goback = true;
+    	    				} catch (Exception e) {System.out.println("Error" + e);}
+    	    				
+    	    				break;
+    	    			default: System.out.println("Valore non valido");
+    	    			}
+    	    		}
 	    			break;
 	    		case 2:
 	    			while(!goback) {
@@ -343,6 +379,7 @@ public class GestioneTrasporti {
 	    					break;
 	    				case 2:
 	    					break;
+	    					default: System.out.println("Valore non valido");
 	    				}
 	    			}
 	    			break;
@@ -362,6 +399,7 @@ public class GestioneTrasporti {
 	    					break;
 	    				case 2:
 	    					break;
+	    				default: System.out.println("Valore non valido");
 	    				}
 	    			}
 	    			break;
