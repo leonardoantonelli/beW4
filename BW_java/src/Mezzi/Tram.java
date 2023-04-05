@@ -1,7 +1,7 @@
 package Mezzi;
 
-public class Tram extends MezziDiTrasporto {
+public class Tram extends MezzoDiTrasporto {
 	
-	private Long maxposti;
+
 
 }

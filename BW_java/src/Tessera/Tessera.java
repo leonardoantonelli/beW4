@@ -4,16 +4,21 @@ package Tessera;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import Main.GestioneTrasporti;
+import TitoloDiVIaggio.Abbonamento;
+
 
 @Entity
 @Table(name = "tessere")
@@ -21,19 +26,23 @@ public class Tessera {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long tessera_id;
 	private String nome;
 	private String cognome;
-	private Date datadinascita;
+	private LocalDate datadinascita;
 	private Date dataemissione;
 	private LocalDate datascadenza;
 	private Boolean verificata;
+	@OneToMany(mappedBy="tessera")
+	private List<Abbonamento> abbonamenti;
 
 	
 	
 	//Costruttori
 	
-	public Tessera() {}
+	public Tessera() {
+		this.abbonamenti = new ArrayList<>();
+	}
 	
 	public Tessera(Boolean verificata) {
 		this.setNome();
@@ -46,8 +55,8 @@ public class Tessera {
 	
 	
 	
-	public Tessera(Long id, String nome, String cognome, Date dataemissione, LocalDate datascadenza) {
-	this.id = id;
+	public Tessera(Long tessera_id, String nome, String cognome, Date dataemissione, LocalDate datascadenza) {
+	this.tessera_id = tessera_id;
 	this.nome = nome;
 	this.cognome = cognome;
 	this.dataemissione = dataemissione;
@@ -88,7 +97,7 @@ public class Tessera {
 		this.datascadenza = newdate;
 	}
 	public Long getId() {
-		return id;
+		return tessera_id;
 	}
 
 	public Boolean getVerificata() {
@@ -99,7 +108,7 @@ public class Tessera {
 		this.verificata = verificata;
 	}
 
-	public Date getDatadinascita() {
+	public LocalDate getDatadinascita() {
 		return datadinascita;
 	}
 
@@ -116,8 +125,9 @@ public class Tessera {
 				if(date.after(oggi)) {
 					System.err.println("Non sapevo sapessi viaggiare nel tempo! Prova un data valida");
 					s = GestioneTrasporti.s.nextLine();
-				} else {				
-					this.datadinascita = date;
+				} else {
+					LocalDate date1 = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+					this.datadinascita = date1;
 					break;
 				}
 			} catch (Exception e) {
@@ -126,4 +136,21 @@ public class Tessera {
 			}
 		}
 	}
+
+	public List<Abbonamento> getAbbonamenti() {
+		return abbonamenti;
+	}
+
+	public void setAbbonamenti(List<Abbonamento> abbonamenti) {
+		this.abbonamenti = abbonamenti;
+	}
+
+	@Override
+	public String toString() {
+		return "Tessera [tessera_id : " + tessera_id + ", nome : " + nome + ", cognome : " + cognome + ", datadinascita :"
+				+ datadinascita + ", dataemissione : " + dataemissione + ", datascadenza=" + datascadenza
+				+ ", verificata : " + verificata + ", abbonamenti : " + abbonamenti.size() + "] \n";
+	}
+
+	
 }

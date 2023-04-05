@@ -14,22 +14,24 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import Enum.Ticket_Office;
 import Main.GestioneTrasporti;
+import Tessera.Tessera;
 
 @Entity
 @Table(name = "titoli_di_viaggio")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "Articolo", discriminatorType = DiscriminatorType.STRING)
 @NamedQuery(name = "Elementi.FindAll", query = "SELECT t FROM TitoloDiVIaggio t")
 public class TitoloDiVIaggio {
 
     @Id
     private Long id;
-
+   
     @Enumerated(EnumType.STRING)
     private Ticket_Office puntoemissione;
 

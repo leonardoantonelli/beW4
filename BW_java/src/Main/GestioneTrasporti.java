@@ -30,14 +30,7 @@ public class GestioneTrasporti {
 	Distributore d3 = new Distributore();
 
 	while (true) {
-	    System.out.println("Seleziona una delle seguenti opzioni:" + "\n 1 ACQUISTA TITOLO DI VIAGGIO " // Crea
-													    // biglietti
-													    // e
-													    // abbonamenti
-													    // solo se
-													    // provvisti
-													    // di numero
-													    // tessera
+	    System.out.println("Seleziona una delle seguenti opzioni:" + "\n 1 ACQUISTA TITOLO DI VIAGGIO " // Crea biglietti e abbonamenti solo se provvisti di numero tessera
 		    + "\n 2 SOTTOSCRIVI TESSERA " // Crea una tessera
 		    + "\n 3 GESTIONE BIGLIETTI/ABBONAMENTI " // Visualizza tutti i biglietti/abbonamenti emessi in un
 							     // range di date
@@ -131,6 +124,7 @@ public class GestioneTrasporti {
 						a.setDataemissione();
 						a.setScadenzaAbbonamento();
 						a.setPuntoemissione(opzionesalvata);
+						a.setTessera(t);
 						TitoloDiViaggioDAO.saveTitoloViaggio(a);
 						System.out.println("Abbonamento aggiunto con successo!");
 						esci = true;
@@ -179,7 +173,8 @@ public class GestioneTrasporti {
 		    System.out.println("Seleziona una delle seguenti opzioni | 0 per uscire "
 			    + "\n 1 VISUALIZZA TUTTI I TITOLI DI VIAGGIO"
 			    + "\n 2 VISUALIZZA TITOLI DI VIAGGIO IN UN PERIODO DI TEMPO"
-			    + "\n 3 VISUALIZZA TITOLI DI VIAGGIO PER PUNTO DI EMISSIONE");
+			    + "\n 3 VISUALIZZA TITOLI DI VIAGGIO PER PUNTO DI EMISSIONE"
+			    + "\n 4 VERIFICA VALIDITA' ABBONAMENTO");
 		    Integer ss = s.nextInt();
 		    s.nextLine();
 		    switch (ss) {
@@ -236,12 +231,61 @@ public class GestioneTrasporti {
 			    p = s.nextLine();
 			}
 			break;
+		    case 4:
+		    	System.out.println("Inserisci numero della tessera per verifica degli abbonamenti ");
+		    	String numtessera = s.nextLine();
+		    	Boolean quit = false;
+		    	while(!quit) {
+		    		
+		    		try {
+		    			long nT = Integer.parseInt(numtessera);
+		    			Tessera T = TesseraDAO.findTessera(nT);
+		    			if(TesseraDAO.isTessereEmpty() != 0 && T != null) {
+		    				Query q5 = em.createQuery("SELECT a FROM Abbonamento a WHERE tessera_id = :t");
+		    				q5.setParameter("t", nT);
+		    				List<Abbonamento> res = q5.getResultList();
+		    				System.out.println("Tessera n: " + T.getId() + ""
+		    						+ " \n Nome : " + T.getNome() + ""
+		    						+ " \n COgnome : " + T.getCognome() + " "
+		    						+ " \n Numero abbonamenti " + res.size() + " \n");
+		    				res.forEach(a -> System.out.println(" Abbonamento n : " + a.getId() + "\n Scadenza : " + a.getScadenzaAbbonamento() + " \n"));
+		    				quit = true;
+		    			} else {
+		    				System.out.println("Numero tessera non trovato");
+		    				numtessera = s.nextLine();
+		    			}
+		    		} catch (Exception e) {
+		    			System.out.println("Error " + e);
+		    			break;
+		    		}
+		    		
+		    	}
+		    	
+		    	break;
 		    default:
 			System.out.println("Scelta non valida");
 		    }
 		}
 		break;
 	    case 4:
+	    	Boolean quiT = false;
+	    	while(!quiT) {
+	    		try {
+	    			if(TesseraDAO.isTessereEmpty() != 0) {
+	    				Query q6 = em.createQuery("SELECT t FROM Tessera t");
+	    				List<Tessera> arr = q6.getResultList();
+	    				System.out.println("Sono state trovatre : " + arr.size() + (arr.size() == 1 ? " Tessera \n" : " Tessere \n"));
+	    				arr.forEach(tesseract -> System.out.println(tesseract.toString()));
+	    				quiT = true;
+	    			} else {
+	    				System.out.println("Numero tessera non trovato");
+	    				
+	    			}
+	    		} catch (Exception e) {
+	    			System.out.println("Error " + e);
+	    			break;
+	    		}
+	    	}
 		break;
 	    case 5:
 		Boolean back = false;
@@ -269,6 +313,60 @@ public class GestioneTrasporti {
 		}
 		break;
 	    case 6:
+	    	Boolean goback = false;
+	    	while(!goback) {
+	    		System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
+	    				+ "\n 1 AGGIUNGI MESSO"
+	    				+ "\n 2 GESTIONE MANUTENZIONE MEZZO"
+	    				+ "\n 3 GESTIONE TRATTE");
+	    		Integer num = s.nextInt();
+	    		s.nextLine();
+	    		switch(num) {
+	    		case 0:
+	    			goback = true;
+	    			break;
+	    		case 1:
+	    			break;
+	    		case 2:
+	    			while(!goback) {
+	    				System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
+	    						+ "\n 1 CAMBIA STATO MANUTENZIONE MEZZO"
+	    						+ "\n 2 LISTA VEICOLI IN MANUTENZIONE"
+	    						+ "\n 3");
+	    				Integer num1 = s.nextInt();
+	    	    		s.nextLine();
+	    				switch(num1) {
+	    				case 0:
+	    					goback = true;
+	    					break;
+	    				case 1:
+	    					break;
+	    				case 2:
+	    					break;
+	    				}
+	    			}
+	    			break;
+	    		case 3:
+	    			while(!goback) {
+	    				System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
+	    						+ "\n 1 AGGIUNGI TRATTA"
+	    						+ "\n 2 LISTA TRATTE"
+	    						+ "\n 3 ASSEGNA TRATTA");
+	    				Integer num1 = s.nextInt();
+	    	    		s.nextLine();
+	    				switch(num1) {
+	    				case 0:
+	    					goback = true;
+	    					break;
+	    				case 1:
+	    					break;
+	    				case 2:
+	    					break;
+	    				}
+	    			}
+	    			break;
+	    		}
+	    	}
 		break;
 	    case 7:
 		break;
