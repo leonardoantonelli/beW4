@@ -10,6 +10,8 @@ public class Autobus extends MezzoDiTrasporto{
 	
 	public Autobus() {
 		super();
+		
 	}
+	
 	
 }

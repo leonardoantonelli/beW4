@@ -12,7 +12,7 @@ import Tratte.Tratta;
 @Table(name= "mezzi_di_trasporto")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TipoMezzo", discriminatorType = DiscriminatorType.STRING)
-public class MezzoDiTrasporto {
+public class MezzoDiTrasporto{
 	
 	@Id	
 	private String mezzo_id;
@@ -40,6 +40,7 @@ public class MezzoDiTrasporto {
 
 	public MezzoDiTrasporto() {
 		super();
+		this.stato_manutenzione=false;
 	}
 
 	//Getter and Setter
@@ -60,8 +61,20 @@ public class MezzoDiTrasporto {
 		return stato_manutenzione;
 	}
 
-	public void setStatoManutenzione(Boolean stato_manutenzione) {
-		this.stato_manutenzione = stato_manutenzione;
+	public void setStatoManutenzione(MezzoDiTrasporto m) {
+		if(m.getStatoManutenzione()) {
+			this.stato_manutenzione=false;
+			m.setDatafinemanutenzione();
+			System.out.println("il veicolo è uscito ora dalla manutenzione");
+			
+		}
+		else {
+			this.stato_manutenzione=true;
+			m.setDatainziomanutenzione();
+			System.out.println("il veicolo è ora in manutenzione");
+			
+		}
+		
 	}
 
 	//public Date getDatainziotratta() {
@@ -84,16 +97,16 @@ public class MezzoDiTrasporto {
 		return datainziomanutenzione;
 	}
 
-	public void setDatainziomanutenzione(Date datainziomanutenzione) {
-		this.datainziomanutenzione = datainziomanutenzione;
+	public void setDatainziomanutenzione() {
+	//	this.datainziomanutenzione = datainziomanutenzione;
 	}
 
 	public Date getDatafinemanutenzione() {
 		return datafinemanutenzione;
 	}
 
-	public void setDatafinemanutenzione(Date datafinemanutenzione) {
-		this.datafinemanutenzione = datafinemanutenzione;
+	public void setDatafinemanutenzione() {
+		//this.datafinemanutenzione = datafinemanutenzione;
 	}
 
 	public Set<Tratta> getTratte() {

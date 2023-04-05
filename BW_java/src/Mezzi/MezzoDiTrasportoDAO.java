@@ -25,4 +25,25 @@ public class MezzoDiTrasportoDAO {
 		return count;
 	}
 	
+	
+	public static MezzoDiTrasporto trovaMezzo(String s) {
+		MezzoDiTrasporto mezzo =null;
+		try {
+		
+			em.getTransaction().begin();
+			mezzo= em.find(MezzoDiTrasporto.class,s);
+			em.getTransaction().commit();
+			
+		} catch (Exception e) {System.out.println("Error" + e);}
+		return mezzo;
+	}
+	
+	public static void modificaMezzo(MezzoDiTrasporto m) {
+		try {
+			em.getTransaction().begin();
+		    em.merge(m);
+			em.getTransaction().commit();
+	
+		} catch (Exception e) {System.out.println("Error" + e);}
+	}
 }
