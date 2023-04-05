@@ -313,6 +313,60 @@ public class GestioneTrasporti {
 		}
 		break;
 	    case 6:
+	    	Boolean goback = false;
+	    	while(!goback) {
+	    		System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
+	    				+ "\n 1 AGGIUNGI MESSO"
+	    				+ "\n 2 GESTIONE MANUTENZIONE MEZZO"
+	    				+ "\n 3 GESTIONE TRATTE");
+	    		Integer num = s.nextInt();
+	    		s.nextLine();
+	    		switch(num) {
+	    		case 0:
+	    			goback = true;
+	    			break;
+	    		case 1:
+	    			break;
+	    		case 2:
+	    			while(!goback) {
+	    				System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
+	    						+ "\n 1 CAMBIA STATO MANUTENZIONE MEZZO"
+	    						+ "\n 2 LISTA VEICOLI IN MANUTENZIONE"
+	    						+ "\n 3");
+	    				Integer num1 = s.nextInt();
+	    	    		s.nextLine();
+	    				switch(num1) {
+	    				case 0:
+	    					goback = true;
+	    					break;
+	    				case 1:
+	    					break;
+	    				case 2:
+	    					break;
+	    				}
+	    			}
+	    			break;
+	    		case 3:
+	    			while(!goback) {
+	    				System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
+	    						+ "\n 1 AGGIUNGI TRATTA"
+	    						+ "\n 2 LISTA TRATTE"
+	    						+ "\n 3 ASSEGNA TRATTA");
+	    				Integer num1 = s.nextInt();
+	    	    		s.nextLine();
+	    				switch(num1) {
+	    				case 0:
+	    					goback = true;
+	    					break;
+	    				case 1:
+	    					break;
+	    				case 2:
+	    					break;
+	    				}
+	    			}
+	    			break;
+	    		}
+	    	}
 		break;
 	    case 7:
 		break;
