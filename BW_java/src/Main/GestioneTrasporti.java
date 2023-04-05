@@ -18,8 +18,11 @@ import Tessera.Tessera;
 import Tessera.TesseraDAO;
 import TitoloDiVIaggio.Abbonamento;
 import TitoloDiVIaggio.Biglietto;
+import TitoloDiVIaggio.BigliettoDAO;
 import TitoloDiVIaggio.TitoloDiVIaggio;
 import TitoloDiVIaggio.TitoloDiViaggioDAO;
+import Tratte.Tratta;
+import Tratte.TrattaDAO;
 
 public class GestioneTrasporti {
 
@@ -475,7 +478,7 @@ public class GestioneTrasporti {
 		    case 3:
 			while (!goback) {
 			    System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
-				    + "\n 1 AGGIUNGI TRATTA" + "\n 2 LISTA TRATTE" + "\n 3 ASSEGNA TRATTA");
+				    + "\n 1 AGGIUNGI TRATTA" + "\n 2 LISTA TRATTE");
 			    Integer num1 = s.nextInt();
 			    s.nextLine();
 			    switch (num1) {
@@ -483,8 +486,34 @@ public class GestioneTrasporti {
 				goback = true;
 				break;
 			    case 1:
+			    	Tratta tr = new Tratta();
+			    	tr.setZonaDiPartenza();
+			    	tr.setCapolinea();
+			    	tr.setTempoMedioDiPercorrenza();
+			    	System.out.println("Inserisci la targa del mezzo a cui vuoi associare la tratta");
+			    	String targaTratta = s.nextLine();
+			    	try {
+					    MezzoDiTrasporto mdt = MezzoDiTrasportoDAO.trovaMezzo(targaTratta);
+					    if (mdt != null && mdt.getMezzo_id().equals(targaTratta)) {
+						tr.setMezzo(mdt);
+						TrattaDAO.saveTratta(tr);
+					    } else {
+						System.out
+							.println("La targa inserita non corrisponde a nessun mezzo registrato");
+					    }
+					} catch (Exception e) {
+					    System.out.println("" + e);
+
+					}
+			    
 				break;
 			    case 2:
+			    	if(TrattaDAO.isTratteEmpty() != 0) {
+			    		List<Tratta> list = TrattaDAO.getAllTratte();
+			    		if(list.size() != 0) {
+			    			list.forEach(tra -> Tratta.toString(tra));
+			    		}
+			    	} else {System.out.println("Nessuna tratta trovata! Aggiungine una!");}
 				break;
 			    default:
 				System.out.println("Valore non valido");
@@ -501,6 +530,9 @@ public class GestioneTrasporti {
 		    int sp = s.nextInt();
 		    s.nextLine();
 		    switch (sp) {
+		    case 0:
+		    	it = true;
+		    	break;
 		    case 1:
 			while (!it) {
 			    System.out.println(
@@ -509,8 +541,48 @@ public class GestioneTrasporti {
 			    s.nextLine();
 			    switch (sp2) {
 			    case 1:
-				System.out.println("Inserisci il numero del biglietto");
-				TitoloDiVIaggio v2 = TitoloDiViaggioDAO.trovaTitoloViaggio(sp2);
+			    	try {
+			    		System.out.println("Inserisci il numero del biglietto");
+			    		long numeroBig = s.nextLong();
+			    		s.nextLine();
+			    		Biglietto v2 = (Biglietto) TitoloDiViaggioDAO.trovaTitoloViaggio(numeroBig);
+			    		if(v2 != null && v2.getId() == numeroBig && v2.getTimbratura().equals(false)) {
+			    			System.out.println("Bigglietto valido! \n");
+			    			System.out.println("Seleziona il numero di Autobus che vuoi prendere");
+			    			Query allbus = em.createQuery("SELECT m FROM MezzoDiTrasporto m WHERE m.numeroPosti = 30 AND m.stato_manutenzione = false");
+			    			List<MezzoDiTrasporto> allBus = allbus.getResultList();
+			    			if(allBus.size() != 0) {
+			    				allBus.forEach(a -> System.out.println(" Numero Autobus: " + a.getMezzo_id()));
+			    				System.out.println("\n>> Inserisci l'Autobus che vuoi prendere per visualizzare le tratte");
+			    				String targaBus = s.nextLine();
+			    				List<Tratta> tratte = TrattaDAO.getListByMezzoID(targaBus);
+			    				if(tratte != null && tratte.size() != 0) {
+			    					tratte.forEach(tratta -> Tratta.toString(tratta));
+			    					System.out.println("\n>> Inserisci il numero della tratta per partire");
+			    					Long numeroTratta = s.nextLong();
+			    				    s.nextLine();
+			    				    Tratta rotta = TrattaDAO.findTratta(numeroTratta);
+			    				    if(rotta != null && rotta.getTratta_id() == numeroTratta) {
+			    				    	rotta.setTot(rotta.getTot(), 1);
+			    				    	TrattaDAO.modificaTratta(rotta);
+			    				    	v2.setTimbratura(true);
+			    				    	BigliettoDAO.modificaBiglietto(v2);
+			    				    	System.out.println("Biglietto tibrato! Buon Viaggio!");
+			    				    	it = true;
+			    				    } else {
+			    				    	System.out.println("Tratta non trovata!");
+			    				    }
+			    				} else {System.out.println("Questo Autobus non ha tratte");}
+			    			} else {
+			    				System.out.println("Non ci sono Autobus in partenza");
+			    			}
+			    		} else {
+			    			System.out.println("Numero Biglietto non trovato/Biglietto già timbrato!");
+			    			it = true;
+			    		}
+			    	} catch (Exception e) {
+			    		System.out.println("Error" + e);
+			    	}
 				break;
 			    case 2:
 				System.out.println("Inserisci il numero della tessera");
