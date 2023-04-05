@@ -34,14 +34,22 @@ public class GestioneTrasporti {
 	Distributore d3 = new Distributore();
 
 	while (true) {
-	    System.out.println("Seleziona una delle seguenti opzioni:" + "\n 1 ACQUISTA TITOLO DI VIAGGIO " // Crea biglietti e abbonamenti solo se provvisti di numero tessera
+	    System.out.println("Seleziona una delle seguenti opzioni:" + "\n 1 ACQUISTA TITOLO DI VIAGGIO " // Crea
+													    // biglietti
+													    // e
+													    // abbonamenti
+													    // solo se
+													    // provvisti
+													    // di numero
+													    // tessera
 		    + "\n 2 SOTTOSCRIVI TESSERA " // Crea una tessera
 		    + "\n 3 GESTIONE BIGLIETTI/ABBONAMENTI " // Visualizza tutti i biglietti/abbonamenti emessi in un
 							     // range di date
 		    + "\n 4 GESTIONE TESSERE " // Gestione stato distributori
 		    + "\n 5 GESTIONE DISTRIBUTORI " // Verifica validità della tessera inserendo il numero e stampa
 						    // tutte le tessere
-		    + "\n 6 GESTIONE MEZZI "); // Gestione manutenzione mezzi e creazione mezzi con assegnazione tratte
+		    + "\n 6 GESTIONE MEZZI " // Gestione manutenzione mezzi e creazione mezzi con assegnazione tratte
+		    + "\n 7 PARTIAMO!"); // Scegliere il mezzo con cui andare
 
 	    int scelta = s.nextInt();
 	    s.nextLine();
@@ -236,60 +244,61 @@ public class GestioneTrasporti {
 			}
 			break;
 		    case 4:
-		    	System.out.println("Inserisci numero della tessera per verifica degli abbonamenti ");
-		    	String numtessera = s.nextLine();
-		    	Boolean quit = false;
-		    	while(!quit) {
-		    		
-		    		try {
-		    			long nT = Integer.parseInt(numtessera);
-		    			Tessera T = TesseraDAO.findTessera(nT);
-		    			if(TesseraDAO.isTessereEmpty() != 0 && T != null) {
-		    				Query q5 = em.createQuery("SELECT a FROM Abbonamento a WHERE tessera_id = :t");
-		    				q5.setParameter("t", nT);
-		    				List<Abbonamento> res = q5.getResultList();
-		    				System.out.println("Tessera n: " + T.getId() + ""
-		    						+ " \n Nome : " + T.getNome() + ""
-		    						+ " \n COgnome : " + T.getCognome() + " "
-		    						+ " \n Numero abbonamenti " + res.size() + " \n");
-		    				res.forEach(a -> System.out.println(" Abbonamento n : " + a.getId() + "\n Scadenza : " + a.getScadenzaAbbonamento() + " \n"));
-		    				quit = true;
-		    			} else {
-		    				System.out.println("Numero tessera non trovato");
-		    				numtessera = s.nextLine();
-		    			}
-		    		} catch (Exception e) {
-		    			System.out.println("Error " + e);
-		    			break;
-		    		}
-		    		
-		    	}
-		    	
-		    	break;
+			System.out.println("Inserisci numero della tessera per verifica degli abbonamenti ");
+			String numtessera = s.nextLine();
+			Boolean quit = false;
+			while (!quit) {
+
+			    try {
+				long nT = Integer.parseInt(numtessera);
+				Tessera T = TesseraDAO.findTessera(nT);
+				if (TesseraDAO.isTessereEmpty() != 0 && T != null) {
+				    Query q5 = em.createQuery("SELECT a FROM Abbonamento a WHERE tessera_id = :t");
+				    q5.setParameter("t", nT);
+				    List<Abbonamento> res = q5.getResultList();
+				    System.out.println("Tessera n: " + T.getId() + "" + " \n Nome : " + T.getNome() + ""
+					    + " \n COgnome : " + T.getCognome() + " " + " \n Numero abbonamenti "
+					    + res.size() + " \n");
+				    res.forEach(a -> System.out.println(" Abbonamento n : " + a.getId()
+					    + "\n Scadenza : " + a.getScadenzaAbbonamento() + " \n"));
+				    quit = true;
+				} else {
+				    System.out.println("Numero tessera non trovato");
+				    numtessera = s.nextLine();
+				}
+			    } catch (Exception e) {
+				System.out.println("Error " + e);
+				break;
+			    }
+
+			}
+
+			break;
 		    default:
 			System.out.println("Scelta non valida");
 		    }
 		}
 		break;
 	    case 4:
-	    	Boolean quiT = false;
-	    	while(!quiT) {
-	    		try {
-	    			if(TesseraDAO.isTessereEmpty() != 0) {
-	    				Query q6 = em.createQuery("SELECT t FROM Tessera t");
-	    				List<Tessera> arr = q6.getResultList();
-	    				System.out.println("Sono state trovatre : " + arr.size() + (arr.size() == 1 ? " Tessera \n" : " Tessere \n"));
-	    				arr.forEach(tesseract -> System.out.println(tesseract.toString()));
-	    				quiT = true;
-	    			} else {
-	    				System.out.println("Numero tessera non trovato");
-	    				
-	    			}
-	    		} catch (Exception e) {
-	    			System.out.println("Error " + e);
-	    			break;
-	    		}
-	    	}
+		Boolean quiT = false;
+		while (!quiT) {
+		    try {
+			if (TesseraDAO.isTessereEmpty() != 0) {
+			    Query q6 = em.createQuery("SELECT t FROM Tessera t");
+			    List<Tessera> arr = q6.getResultList();
+			    System.out.println("Sono state trovatre : " + arr.size()
+				    + (arr.size() == 1 ? " Tessera \n" : " Tessere \n"));
+			    arr.forEach(tesseract -> System.out.println(tesseract.toString()));
+			    quiT = true;
+			} else {
+			    System.out.println("Numero tessera non trovato");
+
+			}
+		    } catch (Exception e) {
+			System.out.println("Error " + e);
+			break;
+		    }
+		}
 		break;
 	    case 5:
 		Boolean back = false;
@@ -317,124 +326,205 @@ public class GestioneTrasporti {
 		}
 		break;
 	    case 6:
-	    	Boolean goback = false;
-	    	while(!goback) {
-	    		System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
-	    				+ "\n 1 AGGIUNGI MEZZO"
-	    				+ "\n 2 GESTIONE MANUTENZIONE MEZZO"
-	    				+ "\n 3 GESTIONE TRATTE");
-	    		Integer num = s.nextInt();
-	    		s.nextLine();
-	    		switch(num) {
-	    		case 0:
-	    			goback = true;
-	    			break;
-	    		case 1:
-	    			
-	    			System.out.println("Seleziona il tipo di mezzo che vuoi aggiungere: 1 Autobus - 2 Tram | 0 per uscire");
-	    			Integer num2 = s.nextInt();
-    	    		s.nextLine();
-    	    		while(!goback) {
-    	    			switch(num2) {
-    	    			case 0:
-    	    				goback = true;
-    	    				break;
-    	    			case 1:
-    	    				try {
-    	    					Autobus a = new Autobus();
-    	    					a.setMezzo_id();
-    	    					a.setNumeroPosti(a);
-    	    					MezzoDiTrasportoDAO.saveMezzo(a);
-    	    					goback = true;
-    	    				} catch (Exception e) {System.out.println("Error" + e);}
-    	    				break;
-    	    			case 2:
-    	    				try {
-    	    					Tram tm = new Tram();
-    	    					tm.setMezzo_id();
-    	    					tm.setNumeroPosti(tm);
-    	    					MezzoDiTrasportoDAO.saveMezzo(tm);
-    	    					goback = true;
-    	    				} catch (Exception e) {System.out.println("Error" + e);}
-    	    				
-    	    				break;
-    	    			default: System.out.println("Valore non valido");
-    	    			}
-    	    		}
-	    			break;
-	    		case 2:
-	    			while(!goback) {
-	    				System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
-	    						+ "\n 1 CAMBIA STATO MANUTENZIONE MEZZO"
-	    						+ "\n 2 LISTA VEICOLI IN MANUTENZIONE"
-	    						+ "\n 3");
-	    				Integer num1 = s.nextInt();
-	    	    		s.nextLine();
-	    				switch(num1) {
-	    				case 0:
-	    					goback = true;
-	    					break;
-	    				case 1:
-	    					System.out.println("Inserisci la targa del mezzo che vuoi mandare in manutanzione / rimuovere dalla manutenzione ");
-	    					String ntarga= s.nextLine();
-	    					try { 
-	    						MezzoDiTrasporto mdt= MezzoDiTrasportoDAO.trovaMezzo(ntarga);
-	    						if(mdt != null && mdt.getMezzo_id().equals(ntarga)) {
-	    							mdt.setStatoManutenzione(mdt);
-	    							MezzoDiTrasportoDAO.modificaMezzo(mdt);
-	    						}
-	    						else {
-	    							System.out.println("la targe inserita non corrisponde a nessun mezzo registrato");
-	    						}
-	    					}
-	    					catch(Exception e){
-	    	    				System.out.println(""+e);
+		Boolean goback = false;
+		while (!goback) {
+		    System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
+			    + "\n 1 AGGIUNGI MEZZO" + "\n 2 GESTIONE MANUTENZIONE MEZZO" + "\n 3 GESTIONE TRATTE");
+		    Integer num = s.nextInt();
+		    s.nextLine();
+		    switch (num) {
+		    case 0:
+			goback = true;
+			break;
+		    case 1:
 
-	    					}
-	    					
-	    				
-	    					
-	    					break;
-	    				case 2:
-	    					Query q9= em.createQuery("SELECT m FROM MezzoDiTrasporto m WHERE m.stato_manutenzione = true ");
-	    					List <MezzoDiTrasporto> lmezzi= q9.getResultList();
-	    					if(lmezzi.size() !=0 ) {
-	    						System.out.println("in manutenzione ci sono: " + lmezzi.size() + (lmezzi.size() ==1 ? " mezzo \n " : " mezzi \n"));
-	                        lmezzi.forEach(m-> System.out.println( " Numero targa: " + m.getMezzo_id() +" \n Data inizio manutenzione: " + m.getDatainziomanutenzione() + "\n" ));
-	    					}
-	    					else {
-	    						System.out.println("Non ci sono mezzi in menutenzione");
+			System.out.println(
+				"Seleziona il tipo di mezzo che vuoi aggiungere: 1 Autobus - 2 Tram | 0 per uscire");
+			Integer num2 = s.nextInt();
+			s.nextLine();
+			while (!goback) {
+			    switch (num2) {
+			    case 0:
+				goback = true;
+				break;
+			    case 1:
+				try {
+				    Autobus a = new Autobus();
+				    a.setMezzo_id();
+				    a.setNumeroPosti(a);
+				    MezzoDiTrasportoDAO.saveMezzo(a);
+				    goback = true;
+				} catch (Exception e) {
+				    System.out.println("Error" + e);
+				}
+				break;
+			    case 2:
+				try {
+				    Tram tm = new Tram();
+				    tm.setMezzo_id();
+				    tm.setNumeroPosti(tm);
+				    MezzoDiTrasportoDAO.saveMezzo(tm);
+				    goback = true;
+				} catch (Exception e) {
+				    System.out.println("Error" + e);
+				}
 
-	    					};
-	    					break;
-	    					default: System.out.println("Valore non valido");
-	    				}
-	    			}
-	    			break;
-	    		case 3:
-	    			while(!goback) {
-	    				System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
-	    						+ "\n 1 AGGIUNGI TRATTA"
-	    						+ "\n 2 LISTA TRATTE"
-	    						+ "\n 3 ASSEGNA TRATTA");
-	    				Integer num1 = s.nextInt();
-	    	    		s.nextLine();
-	    				switch(num1) {
-	    				case 0:
-	    					goback = true;
-	    					break;
-	    				case 1:
-	    					break;
-	    				case 2:
-	    					break;
-	    				default: System.out.println("Valore non valido");
-	    				}
-	    			}
-	    			break;
-	    		}
-	    	}
+				break;
+			    default:
+				System.out.println("Valore non valido");
+			    }
+			}
+			break;
+		    case 2:
+			while (!goback) {
+			    System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
+				    + "\n 1 CAMBIA STATO MANUTENZIONE MEZZO" + "\n 2 LISTA VEICOLI IN MANUTENZIONE"
+				    + "\n 3 VERIFICA STATO VEICOLO");
+			    Integer num1 = s.nextInt();
+			    s.nextLine();
+			    switch (num1) {
+			    case 0:
+				goback = true;
+				break;
+			    case 1:
+				System.out.println(
+					"Inserisci la targa del mezzo che vuoi mandare in manutanzione / rimuovere dalla manutenzione ");
+				String ntarga = s.nextLine();
+				try {
+				    MezzoDiTrasporto mdt = MezzoDiTrasportoDAO.trovaMezzo(ntarga);
+				    if (mdt != null && mdt.getMezzo_id().equals(ntarga)) {
+					mdt.setStatoManutenzione(mdt);
+					MezzoDiTrasportoDAO.modificaMezzo(mdt);
+				    } else {
+					System.out
+						.println("La targa inserita non corrisponde a nessun mezzo registrato");
+				    }
+				} catch (Exception e) {
+				    System.out.println("" + e);
+
+				}
+
+				break;
+			    case 2:
+				Query q9 = em.createQuery(
+					"SELECT m FROM MezzoDiTrasporto m WHERE m.stato_manutenzione = true ");
+				List<MezzoDiTrasporto> lmezzi = q9.getResultList();
+				if (lmezzi.size() != 0) {
+				    System.out.println("in manutenzione ci sono: " + lmezzi.size()
+					    + (lmezzi.size() == 1 ? " mezzo \n " : " mezzi \n"));
+				    lmezzi.forEach(m -> System.out.println(" Numero targa: " + m.getMezzo_id()
+					    + " \n Data inizio manutenzione: " + m.getDatainziomanutenzione() + "\n"));
+				} else {
+				    System.out.println("Non ci sono mezzi in menutenzione");
+
+				}
+				;
+				break;
+			    case 3:
+				System.out.println("Inserisci la targa del mezzo di cui vuoi verificare lo stato");
+				String ntarga2 = s.nextLine();
+				try {
+				    MezzoDiTrasporto mdt = MezzoDiTrasportoDAO.trovaMezzo(ntarga2);
+				    if (mdt != null && mdt.getMezzo_id().equals(ntarga2)) {
+					if (mdt instanceof Autobus) {
+					    System.out.println("Tipologia veicolo: Autobus" + "\n Numero targa: "
+						    + mdt.getMezzo_id() + "\n Stato: "
+						    + (mdt.getStatoManutenzione() ? " IN MANUTENZIONE" : " IN SERVIZIO")
+						    + "\n Data inizio manutenzione: "
+						    + (mdt.getDatainziomanutenzione() == null
+							    ? "non ancora in MANUTENZIONE"
+							    : mdt.getDatainziomanutenzione())
+						    + "\n Data fine manutenzione: "
+						    + (mdt.getDatainziomanutenzione() == null
+							    ? "non ancora in MANUTENZIONE"
+							    : (mdt.getDatafinemanutenzione() == null
+								    ? "ancora in MANUTENZIONE"
+								    : mdt.getDatafinemanutenzione()))
+						    + "\n");
+					} else {
+					    System.out.println("Tipologia veicolo: Tram" + "\n Numero targa: "
+						    + mdt.getMezzo_id() + "\n Stato: "
+						    + (mdt.getStatoManutenzione() ? " IN MANUTENZIONE" : " IN SERVIZIO")
+						    + "\n Data inizio manutenzione: "
+						    + (mdt.getDatainziomanutenzione() == null
+							    ? "non ancora in MANUTENZIONE"
+							    : mdt.getDatainziomanutenzione())
+						    + "\n Data fine manutenzione: "
+						    + (mdt.getDatainziomanutenzione() == null
+							    ? "non ancora in MANUTENZIONE"
+							    : (mdt.getDatafinemanutenzione() == null
+								    ? "ancora in MANUTENZIONE"
+								    : mdt.getDatafinemanutenzione()))
+						    + "\n");
+					}
+
+				    } else {
+					System.out
+						.println("La targa inserita non corrisponde a nessun mezzo registrato");
+				    }
+				} catch (Exception e) {
+				    System.out.println("" + e);
+
+				}
+				break;
+			    default:
+				System.out.println("Valore non valido");
+			    }
+			}
+			break;
+		    case 3:
+			while (!goback) {
+			    System.out.println("Seleziona una delle seguenti azioni per continuare | 0 per uscire "
+				    + "\n 1 AGGIUNGI TRATTA" + "\n 2 LISTA TRATTE" + "\n 3 ASSEGNA TRATTA");
+			    Integer num1 = s.nextInt();
+			    s.nextLine();
+			    switch (num1) {
+			    case 0:
+				goback = true;
+				break;
+			    case 1:
+				break;
+			    case 2:
+				break;
+			    default:
+				System.out.println("Valore non valido");
+			    }
+			}
+			break;
+		    }
+		}
 		break;
 	    case 7:
+		Boolean it = false;
+		while (!it) {
+		    System.out.println(">> Quale mezzo di trasporto vuoi prendere? 1 Autobus - 2 Tram | 0 per uscire");
+		    int sp = s.nextInt();
+		    s.nextLine();
+		    switch (sp) {
+		    case 1:
+			while (!it) {
+			    System.out.println(
+				    "Quale titolo di viaggio vuoi utilizzare? 1 Biglietto - 2 Tessera/Abbonamento");
+			    int sp2 = s.nextInt();
+			    s.nextLine();
+			    switch (sp2) {
+			    case 1:
+				System.out.println("Inserisci il numero del biglietto");
+				TitoloDiVIaggio v2 = TitoloDiViaggioDAO.trovaTitoloViaggio(sp2);
+				break;
+			    case 2:
+				System.out.println("Inserisci il numero della tessera");
+				break;
+			    }
+			}
+			break;
+		    case 2:
+			break;
+		    default:
+			System.out.println("utilizza un valore valido");
+		    }
+		}
+		;
 		break;
 	    case 8:
 		break;
