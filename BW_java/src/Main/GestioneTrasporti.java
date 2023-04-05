@@ -11,6 +11,7 @@ import Distributori.Distributore;
 import Enum.Ticket_Office;
 import JpaUtil.JpaUtil;
 import Mezzi.Autobus;
+import Mezzi.MezzoDiTrasporto;
 import Mezzi.MezzoDiTrasportoDAO;
 import Mezzi.Tram;
 import Tessera.Tessera;
@@ -343,7 +344,6 @@ public class GestioneTrasporti {
     	    					Autobus a = new Autobus();
     	    					a.setMezzo_id();
     	    					a.setNumeroPosti(a);
-    	    					a.setStatoManutenzione(false);
     	    					MezzoDiTrasportoDAO.saveMezzo(a);
     	    					goback = true;
     	    				} catch (Exception e) {System.out.println("Error" + e);}
@@ -353,7 +353,6 @@ public class GestioneTrasporti {
     	    					Tram tm = new Tram();
     	    					tm.setMezzo_id();
     	    					tm.setNumeroPosti(tm);
-    	    					tm.setStatoManutenzione(false);
     	    					MezzoDiTrasportoDAO.saveMezzo(tm);
     	    					goback = true;
     	    				} catch (Exception e) {System.out.println("Error" + e);}
@@ -376,8 +375,37 @@ public class GestioneTrasporti {
 	    					goback = true;
 	    					break;
 	    				case 1:
+	    					System.out.println("Inserisci la targa del mezzo che vuoi mandare in manutanzione / rimuovere dalla manutenzione ");
+	    					String ntarga= s.nextLine();
+	    					try { 
+	    						MezzoDiTrasporto mdt= MezzoDiTrasportoDAO.trovaMezzo(ntarga);
+	    						if(mdt != null && mdt.getMezzo_id().equals(ntarga)) {
+	    							mdt.setStatoManutenzione(mdt);
+	    							MezzoDiTrasportoDAO.modificaMezzo(mdt);
+	    						}
+	    						else {
+	    							System.out.println("la targe inserita non corrisponde a nessun mezzo registrato");
+	    						}
+	    					}
+	    					catch(Exception e){
+	    	    				System.out.println(""+e);
+
+	    					}
+	    					
+	    				
+	    					
 	    					break;
 	    				case 2:
+	    					Query q9= em.createQuery("SELECT m FROM MezzoDiTrasporto m WHERE m.stato_manutenzione = true ");
+	    					List <MezzoDiTrasporto> lmezzi= q9.getResultList();
+	    					if(lmezzi.size() !=0 ) {
+	    						System.out.println("in manutenzione ci sono: " + lmezzi.size() + (lmezzi.size() ==1 ? " mezzo \n " : " mezzi \n"));
+	                        lmezzi.forEach(m-> System.out.println( " Numero targa: " + m.getMezzo_id() +" \n Data inizio manutenzione: " + m.getDatainziomanutenzione() + "\n" ));
+	    					}
+	    					else {
+	    						System.out.println("Non ci sono mezzi in menutenzione");
+
+	    					};
 	    					break;
 	    					default: System.out.println("Valore non valido");
 	    				}
