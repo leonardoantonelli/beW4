@@ -1,7 +1,16 @@
 package Mezzi;
 
-public class Tram extends MezziDiTrasporto {
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name= "tram")
+@DiscriminatorValue("Tram")
+public class Tram extends MezzoDiTrasporto {
 	
-	private Long maxposti;
+	public Tram() {
+		super();
+	}
 
 }

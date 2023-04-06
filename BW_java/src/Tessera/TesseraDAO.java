@@ -1,9 +1,17 @@
 package Tessera;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import JpaUtil.JpaUtil;
+import Mezzi.MezzoDiTrasporto;
+import Tratte.Tratta;
+import Tratte.TrattaDAO;
 
 public class TesseraDAO {
 
@@ -32,4 +40,6 @@ public class TesseraDAO {
 	    return count;
 		
 	}
+	
+	
 }
