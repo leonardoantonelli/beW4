@@ -14,10 +14,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Query;
 import javax.persistence.Table;
 
 import Main.GestioneTrasporti;
+import Mezzi.MezzoDiTrasporto;
 import TitoloDiVIaggio.Abbonamento;
+import Tratte.Tratta;
+import Tratte.TrattaDAO;
 
 
 @Entity

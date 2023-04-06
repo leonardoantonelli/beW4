@@ -1,5 +1,7 @@
 package Main;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -571,10 +573,15 @@ public class GestioneTrasporti {
 			    				    	it = true;
 			    				    } else {
 			    				    	System.out.println("Tratta non trovata!");
+			    				    	it = true;
 			    				    }
-			    				} else {System.out.println("Questo Autobus non ha tratte");}
+			    				} else {
+			    					System.out.println("Questo Autobus non ha tratte");
+			    					it = true;
+			    					}
 			    			} else {
 			    				System.out.println("Non ci sono Autobus in partenza");
+			    				it = true;
 			    			}
 			    		} else {
 			    			System.out.println("Numero Biglietto non trovato/Biglietto già timbrato!");
@@ -585,12 +592,164 @@ public class GestioneTrasporti {
 			    	}
 				break;
 			    case 2:
-				System.out.println("Inserisci il numero della tessera");
+				try {
+					System.out.println("Inserisci il numero della tessera");
+		    		long numeroTess = s.nextLong();
+		    		s.nextLine();
+		    		Tessera t2 = (Tessera) TesseraDAO.findTessera(numeroTess);
+		    		Date oggi = new Date();
+		    		LocalDate date = oggi.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		    		if(t2 != null && t2.getId() == numeroTess && date.isAfter(t2.getDatascadenza()) ) {
+		    			System.out.println("Benvenuto " + t2.getNome() + "\n");
+		    			System.out.println("Seleziona il numero di Autobus che vuoi prendere");
+		    			Query allbus = em.createQuery("SELECT m FROM MezzoDiTrasporto m WHERE m.numeroPosti = 30 AND m.stato_manutenzione = false");
+		    			List<MezzoDiTrasporto> allBus = allbus.getResultList();
+		    			if(allBus.size() != 0) {
+		    				allBus.forEach(a -> System.out.println(" Numero Autobus: " + a.getMezzo_id()));
+		    				System.out.println("\n>> Inserisci l'Autobus che vuoi prendere per visualizzare le tratte");
+		    				String targaBus = s.nextLine();
+		    				List<Tratta> tratte = TrattaDAO.getListByMezzoID(targaBus);
+		    				if(tratte != null && tratte.size() != 0) {
+		    					tratte.forEach(tratta -> Tratta.toString(tratta));
+		    					System.out.println("\n>> Inserisci il numero della tratta per partire");
+		    					Long numeroTratta = s.nextLong();
+		    				    s.nextLine();
+		    				    Tratta rotta = TrattaDAO.findTratta(numeroTratta);
+		    				    if(rotta != null && rotta.getTratta_id() == numeroTratta) {
+		    				    	rotta.setTot(rotta.getTot(), 1);
+		    				    	TrattaDAO.modificaTratta(rotta);
+		    				    	System.out.println("Buon Viaggio!");
+		    				    	it = true;
+		    				    } else {
+		    				    	System.out.println("Tratta non trovata!");
+		    				    	it = true;
+		    				    }
+		    				} else {
+		    					System.out.println("Questo Autobus non ha tratte");
+		    					it = true;
+		    					}
+		    			} else {
+		    				System.out.println("Non ci sono Autobus in partenza");
+		    				it = true;
+		    			}
+		    		} else {
+		    			System.out.println("Nessuna tessera trovata/Tessera scaduta!");
+		    			it = true;
+		    		}
+		    	} catch (Exception e) {
+		    		System.out.println("Error" + e);
+		    	}
 				break;
 			    }
 			}
 			break;
 		    case 2:
+		    	while (!it) {
+				    System.out.println(
+					    "Quale titolo di viaggio vuoi utilizzare? 1 Biglietto - 2 Tessera/Abbonamento");
+				    int sp2 = s.nextInt();
+				    s.nextLine();
+				    switch (sp2) {
+				    case 1:
+				    	try {
+				    		System.out.println("Inserisci il numero del biglietto");
+				    		long numeroBig = s.nextLong();
+				    		s.nextLine();
+				    		Biglietto v2 = (Biglietto) TitoloDiViaggioDAO.trovaTitoloViaggio(numeroBig);
+				    		if(v2 != null && v2.getId() == numeroBig && v2.getTimbratura().equals(false)) {
+				    			System.out.println("Bigglietto valido! \n");
+				    			System.out.println("Seleziona il numero di Tram che vuoi prendere");
+				    			Query allbus = em.createQuery("SELECT m FROM MezzoDiTrasporto m WHERE m.numeroPosti = 60 AND m.stato_manutenzione = false");
+				    			List<MezzoDiTrasporto> allBus = allbus.getResultList();
+				    			if(allBus.size() != 0) {
+				    				allBus.forEach(a -> System.out.println(" Numero Tram: " + a.getMezzo_id()));
+				    				System.out.println("\n>> Inserisci il Tram che vuoi prendere per visualizzare le tratte");
+				    				String targaBus = s.nextLine();
+				    				List<Tratta> tratte = TrattaDAO.getListByMezzoID(targaBus);
+				    				if(tratte != null && tratte.size() != 0) {
+				    					tratte.forEach(tratta -> Tratta.toString(tratta));
+				    					System.out.println("\n>> Inserisci il numero della tratta per partire");
+				    					Long numeroTratta = s.nextLong();
+				    				    s.nextLine();
+				    				    Tratta rotta = TrattaDAO.findTratta(numeroTratta);
+				    				    if(rotta != null && rotta.getTratta_id() == numeroTratta) {
+				    				    	rotta.setTot(rotta.getTot(), 1);
+				    				    	TrattaDAO.modificaTratta(rotta);
+				    				    	v2.setTimbratura(true);
+				    				    	BigliettoDAO.modificaBiglietto(v2);
+				    				    	System.out.println("Biglietto tibrato! Buon Viaggio!");
+				    				    	it = true;
+				    				    } else {
+				    				    	System.out.println("Tratta non trovata!");
+				    				    	it = true;
+				    				    }
+				    				} else {
+				    					System.out.println("Questo Tram non ha tratte");
+				    					it = true;
+				    					}
+				    			} else {
+				    				System.out.println("Non ci sono Tram in partenza");
+				    				it = true;
+				    			}
+				    		} else {
+				    			System.out.println("Numero Biglietto non trovato/Biglietto già timbrato!");
+				    			it = true;
+				    		}
+				    	} catch (Exception e) {
+				    		System.out.println("Error" + e);
+				    	}
+					break;
+				    case 2:
+					try {
+						System.out.println("Inserisci il numero della tessera");
+			    		long numeroTess = s.nextLong();
+			    		s.nextLine();
+			    		Tessera t2 = (Tessera) TesseraDAO.findTessera(numeroTess);
+			    		Date oggi = new Date();
+			    		LocalDate date = oggi.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			    		if(t2 != null && t2.getId() == numeroTess && t2.getDatascadenza().isAfter(date) ) {
+			    			System.out.println("Benvenuto " + t2.getNome() + "\n");
+			    			System.out.println("Seleziona il numero di Tram che vuoi prendere");
+			    			Query allbus = em.createQuery("SELECT m FROM MezzoDiTrasporto m WHERE m.numeroPosti = 60 AND m.stato_manutenzione = false");
+			    			List<MezzoDiTrasporto> allBus = allbus.getResultList();
+			    			if(allBus.size() != 0) {
+			    				allBus.forEach(a -> System.out.println(" Numero Autobus: " + a.getMezzo_id()));
+			    				System.out.println("\n>> Inserisci il Tram che vuoi prendere per visualizzare le tratte");
+			    				String targaBus = s.nextLine();
+			    				List<Tratta> tratte = TrattaDAO.getListByMezzoID(targaBus);
+			    				if(tratte != null && tratte.size() != 0) {
+			    					tratte.forEach(tratta -> Tratta.toString(tratta));
+			    					System.out.println("\n>> Inserisci il numero della tratta per partire");
+			    					Long numeroTratta = s.nextLong();
+			    				    s.nextLine();
+			    				    Tratta rotta = TrattaDAO.findTratta(numeroTratta);
+			    				    if(rotta != null && rotta.getTratta_id() == numeroTratta) {
+			    				    	rotta.setTot(rotta.getTot(), 1);
+			    				    	TrattaDAO.modificaTratta(rotta);
+			    				    	System.out.println("Buon Viaggio!");
+			    				    	it = true;
+			    				    } else {
+			    				    	System.out.println("Tratta non trovata!");
+			    				    	it = true;
+			    				    }
+			    				} else {
+			    					System.out.println("Questo Tram non ha tratte");
+			    					it = true;
+			    					}
+			    			} else {
+			    				System.out.println("Non ci sono Tram in partenza");
+			    				it = true;
+			    			}
+			    		} else {
+			    			System.out.println("Nessuna tessera trovata/Tessera scaduta!");
+			    			it = true;
+			    		}
+			    	} catch (Exception e) {
+			    		System.out.println("Error" + e);
+			    	}
+					break;
+				    }
+				}
 			break;
 		    default:
 			System.out.println("utilizza un valore valido");

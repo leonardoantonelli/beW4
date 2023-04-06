@@ -96,7 +96,7 @@ public class Tratta {
 	}
 	
 	public static void toString(Tratta tra) {
-		System.out.println("Tratta numero: " + tra.getTratta_id() + ", Partenza: " + tra.getZonaDiPartenza() + ", Capolinea: " + tra.getCapolinea() + ", Durata: " + tra.getTempoMedioDiPercorrenza() + " h \n");
+		System.out.println("Tratta numero: " + tra.getTratta_id() + ", Partenza: " + tra.getZonaDiPartenza() + ", Capolinea: " + tra.getCapolinea() + ", Durata: " + tra.getTempoMedioDiPercorrenza() + " h " + ", Tot partenze: " + tra.getTot() + "\n");
 	}
 
 	public int getTot() {
